@@ -20,44 +20,23 @@ enum t_typename {
 
 #define type(x) _Generic((x), \
     bool: TYPENAME_BOOL, \
+    char: TYPENAME_CHAR, \
     short: TYPENAME_SHORT, \
     int: TYPENAME_INT, \
     long: TYPENAME_LONG, \
     long long: TYPENAME_LONG_LONG, \
-    char: TYPENAME_CHAR, \
     char *: TYPENAME_POINTER_TO_CHAR, \
     default: TYPENAME_OTHER)
 
-#define type_str(t) ({ \
-        char *out; \
-        switch (type(t)) { \
-            case TYPENAME_BOOL: \
-                out = "bool"; \
-                break; \
-            case TYPENAME_CHAR: \
-                out = "char"; \
-                break; \
-            case TYPENAME_SHORT: \
-                out = "short"; \
-                break; \
-            case TYPENAME_INT: \
-                out = "int"; \
-                break; \
-            case TYPENAME_LONG: \
-                out = "long"; \
-                break; \
-            case TYPENAME_LONG_LONG: \
-                out = "long long"; \
-                break; \
-            case TYPENAME_POINTER_TO_CHAR: \
-                out = "pointer to char"; \
-                break; \
-            case TYPENAME_OTHER: \
-                out = "other"; \
-                break; \
-        } \
-        out; \
-    })
+#define type_str(x) _Generic((x), \
+    bool: "bool", \
+    char: "char", \
+    short: "short", \
+    int: "int", \
+    long: "long", \
+    long long: "long long", \
+    char *: "pointer to char", \
+    default: "other")
 
 #endif // TYPE_H
 
