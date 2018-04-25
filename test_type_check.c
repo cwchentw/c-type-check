@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
-#include "type.h"
+#include "type_check.h"
 
 int main()
 {

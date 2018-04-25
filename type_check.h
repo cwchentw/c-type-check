@@ -1,7 +1,11 @@
-#ifndef TYPE_H
-#define TYPE_H
+#ifndef TYPE_CHECK_H
+#define TYPE_CHECK_H
 
 #include <stdbool.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 enum t_typename {
     TYPENAME_BOOL,
@@ -38,5 +42,9 @@ enum t_typename {
     char *: "pointer to char", \
     default: "other")
 
-#endif // TYPE_H
+#ifdef __cplusplus
+}
+#endif
+
+#endif // TYPE_CHECK_H
 
