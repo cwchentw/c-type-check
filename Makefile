@@ -12,6 +12,10 @@ RM=rm
 RMFLAG=-rf
 TARGET=test_type_check.out
 
+ifndef PREFIX
+	PREFIX=/usr/local
+endif
+
 all: run
 
 check:
@@ -33,3 +37,6 @@ trim:
 
 clean:
 	$(RM) $(RMFLAG) $(TARGET)
+
+install:
+	install -m 644 type_check.h $(PREFIX)/include
