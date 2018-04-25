@@ -7,6 +7,7 @@ ifndef CFLAGS
 endif
 
 C_CHECK=cppcheck
+MEM_CHECK=valgrind
 RM=rm
 RMFLAG=-rf
 TARGET=test_type.out
@@ -16,8 +17,13 @@ all: run
 check:
 	$(C_CHECK) *.h *.c
 
+mem:
+	$(MEM_CHECK) ./$(TARGET)
+	echo $$?
+
 run: compile
 	./$(TARGET)
+	echo $$?
 
 compile: trim
 	$(CC) $(CFLAGS) -o $(TARGET) test_type.c
