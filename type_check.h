@@ -11,6 +11,8 @@ extern "C" {
 enum t_typename {
     TYPENAME_BOOL,
     TYPENAME_CHAR,
+    TYPENAME_SIGNED_CHAR,
+    TYPENAME_UNSIGNED_CHAR,
     TYPENAME_SHORT,
     TYPENAME_INT,
     TYPENAME_LONG,
@@ -33,6 +35,8 @@ enum t_typename {
 #define type(x) _Generic((x), \
     bool: TYPENAME_BOOL, \
     char: TYPENAME_CHAR, \
+    signed char: TYPENAME_SIGNED_CHAR, \
+    unsigned char: TYPENAME_UNSIGNED_CHAR, \
     short: TYPENAME_SHORT, \
     int: TYPENAME_INT, \
     long: TYPENAME_LONG, \
@@ -54,6 +58,8 @@ enum t_typename {
 #define type_str(x) _Generic((x), \
     bool: "bool", \
     char: "char", \
+    signed char: "signed char", \
+    unsigned char: "unsigned char", \
     short: "short", \
     int: "int", \
     long: "long", \

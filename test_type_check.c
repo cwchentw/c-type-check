@@ -28,6 +28,20 @@ int main()
         assert(strcmp(type_str(c), "char") == 0);
     }
 
+    // signed char
+    {
+        signed char c = 'c';
+        assert(type(c) == TYPENAME_SIGNED_CHAR);
+        assert(strcmp(type_str(c), "signed char") == 0);
+    }
+
+    // unsigned char
+    {
+        unsigned char c = 'c';
+        assert(type(c) == TYPENAME_UNSIGNED_CHAR);
+        assert(strcmp(type_str(c), "unsigned char") == 0);
+    }
+
     // short int
     {
         short s = 0;
