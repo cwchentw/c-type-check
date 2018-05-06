@@ -82,6 +82,27 @@ int main()
         assert(strcmp(type_str(ull), "unsigned long long") == 0);
     }
 
+    // float
+    {
+        float f = 0.0;
+        assert(type(f) == TYPENAME_FLOAT);
+        assert(strcmp(type_str(f), "float") == 0);
+    }
+
+    // double
+    {
+        double dl = 0.0;
+        assert(type(dl) == TYPENAME_DOUBLE);
+        assert(strcmp(type_str(dl), "double") == 0);
+    }
+
+    // long double
+    {
+        long double ldl = 0.0;
+        assert(type(ldl) == TYPENAME_LONG_DOUBLE);
+        assert(strcmp(type_str(ldl), "long double") == 0);
+    }
+
     // pointer to char
     {
         char *str = "Hello World";

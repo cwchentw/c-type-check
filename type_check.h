@@ -18,6 +18,9 @@ enum t_typename {
     TYPENAME_UNSIGNED_INT,
     TYPENAME_UNSIGNED_LONG,
     TYPENAME_UNSIGNED_LONG_LONG,
+    TYPENAME_FLOAT,
+    TYPENAME_DOUBLE,
+    TYPENAME_LONG_DOUBLE,
     TYPENAME_POINTER_TO_CHAR,
     TYPENAME_OTHER
 };
@@ -33,6 +36,9 @@ enum t_typename {
     unsigned int: TYPENAME_UNSIGNED_INT, \
     unsigned long: TYPENAME_UNSIGNED_LONG, \
     unsigned long long: TYPENAME_UNSIGNED_LONG_LONG, \
+    float: TYPENAME_FLOAT, \
+    double: TYPENAME_DOUBLE, \
+    long double: TYPENAME_LONG_DOUBLE, \
     char *: TYPENAME_POINTER_TO_CHAR, \
     default: TYPENAME_OTHER)
 
@@ -47,6 +53,9 @@ enum t_typename {
     unsigned int: "unsigned int", \
     unsigned long: "unsigned long", \
     unsigned long long: "unsigned long long", \
+    float: "float", \
+    double: "double", \
+    long double: "long double", \
     char *: "pointer to char", \
     default: "other")
 
