@@ -54,13 +54,42 @@ int main()
         assert(strcmp(type_str(ll), "long long") == 0);
     }
 
-    // char *, i.e. pointer to char
+    // unsigned short
     {
-        assert(type("Hello World") == TYPENAME_POINTER_TO_CHAR);
-        assert(strcmp(type_str("Hello World"), "pointer to char") == 0);
+        unsigned short us = 0;
+        assert(type(us) == TYPENAME_UNSIGNED_SHORT);
+        assert(strcmp(type_str(us), "unsigned short") == 0);
     }
 
-    // Pointer to custem struct.
+    // unsigned int
+    {
+        unsigned int ui = 0;
+        assert(type(ui) == TYPENAME_UNSIGNED_INT);
+        assert(strcmp(type_str(ui), "unsigned int") == 0);
+    }
+
+    // unsigned long
+    {
+        unsigned long ul = 0;
+        assert(type(ul) == TYPENAME_UNSIGNED_LONG);
+        assert(strcmp(type_str(ul), "unsigned long") == 0);
+    }
+
+    // unsigned long long
+    {
+        unsigned long long ull = 0;
+        assert(type(ull) == TYPENAME_UNSIGNED_LONG_LONG);
+        assert(strcmp(type_str(ull), "unsigned long long") == 0);
+    }
+
+    // pointer to char
+    {
+        char *str = "Hello World";
+        assert(type(str) == TYPENAME_POINTER_TO_CHAR);
+        assert(strcmp(type_str(str), "pointer to char") == 0);
+    }
+
+    // Pointer to some struct
     {
         Int *obj = malloc(sizeof(Int));
 
