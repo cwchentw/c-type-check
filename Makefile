@@ -6,8 +6,8 @@ ifndef CFLAGS
 	CFLAGS=-Wall -Wextra -g -std=c11
 endif
 
-C_CHECK=cppcheck
-MEM_CHECK=valgrind
+LINT=cppcheck
+MEM_CHECK=valgrind --quiet
 RM=rm
 RMFLAG=-rf
 TARGET=test_type_check.out
@@ -16,16 +16,15 @@ ifndef PREFIX
 	PREFIX=/usr/local
 endif
 
-all: run
+.PHONY: all lint memo test comple clean install
 
-check:
-	$(C_CHECK) *.h *.c
+all: test
 
-mem:
+memo:
 	$(MEM_CHECK) ./$(TARGET)
 	echo $$?
 
-run: compile
+test: compile
 	./$(TARGET)
 	echo $$?
 
@@ -34,6 +33,9 @@ compile: trim
 
 trim:
 	perl -lpi -e "s{\s+$$}{}g;" *
+
+lint:
+	$(LINT) *.h *.c
 
 clean:
 	$(RM) $(RMFLAG) $(TARGET)
