@@ -132,6 +132,16 @@ int main()
         assert(strcmp(type_str(str), "pointer to char") == 0);
     }
 
+    // pointer to void
+    {
+        void *ptr = (void *) malloc(sizeof(Int));
+
+        assert(type(ptr) == TYPENAME_POINTER_TO_VOID);
+        assert(strcmp(type_str(ptr), "pointer to void") == 0);
+
+        free(ptr);
+    }
+
     // Pointer to some struct
     {
         Int *obj = malloc(sizeof(Int));

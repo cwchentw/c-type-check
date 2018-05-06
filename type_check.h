@@ -26,6 +26,7 @@ enum t_typename {
     TYPENAME_DOUBLE_COMPLEX,
     TYPENAME_LONG_DOUBLE_COMPLEX,
     TYPENAME_POINTER_TO_CHAR,
+    TYPENAME_POINTER_TO_VOID,
     TYPENAME_OTHER
 };
 
@@ -47,6 +48,7 @@ enum t_typename {
     double complex: TYPENAME_DOUBLE_COMPLEX, \
     long double complex: TYPENAME_LONG_DOUBLE_COMPLEX, \
     char *: TYPENAME_POINTER_TO_CHAR, \
+    void *: TYPENAME_POINTER_TO_VOID, \
     default: TYPENAME_OTHER)
 
 #define type_str(x) _Generic((x), \
@@ -67,6 +69,7 @@ enum t_typename {
     double complex: "double complex", \
     long double complex: "long double complex", \
     char *: "pointer to char", \
+    void *: "pointer to void", \
     default: "other")
 
 #ifdef __cplusplus
