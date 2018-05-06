@@ -2,6 +2,7 @@
 #define TYPE_CHECK_H
 
 #include <stdbool.h>
+#include <complex.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,6 +22,9 @@ enum t_typename {
     TYPENAME_FLOAT,
     TYPENAME_DOUBLE,
     TYPENAME_LONG_DOUBLE,
+    TYPENAME_FLOAT_COMPLEX,
+    TYPENAME_DOUBLE_COMPLEX,
+    TYPENAME_LONG_DOUBLE_COMPLEX,
     TYPENAME_POINTER_TO_CHAR,
     TYPENAME_OTHER
 };
@@ -39,6 +43,9 @@ enum t_typename {
     float: TYPENAME_FLOAT, \
     double: TYPENAME_DOUBLE, \
     long double: TYPENAME_LONG_DOUBLE, \
+    float complex: TYPENAME_FLOAT_COMPLEX, \
+    double complex: TYPENAME_DOUBLE_COMPLEX, \
+    long double complex: TYPENAME_LONG_DOUBLE_COMPLEX, \
     char *: TYPENAME_POINTER_TO_CHAR, \
     default: TYPENAME_OTHER)
 
@@ -56,6 +63,9 @@ enum t_typename {
     float: "float", \
     double: "double", \
     long double: "long double", \
+    float complex: "float complex", \
+    double complex: "double complex", \
+    long double complex: "long double complex", \
     char *: "pointer to char", \
     default: "other")
 

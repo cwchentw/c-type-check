@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <complex.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -101,6 +102,27 @@ int main()
         long double ldl = 0.0;
         assert(type(ldl) == TYPENAME_LONG_DOUBLE);
         assert(strcmp(type_str(ldl), "long double") == 0);
+    }
+
+    // float complex
+    {
+        float complex fc = 0.0 + 0.0*I;
+        assert(type(fc) == TYPENAME_FLOAT_COMPLEX);
+        assert(strcmp(type_str(fc), "float complex") == 0);
+    }
+
+    // double complex
+    {
+        double complex dlc = 0.0 + 0.0*I;
+        assert(type(dlc) == TYPENAME_DOUBLE_COMPLEX);
+        assert(strcmp(type_str(dlc), "double complex") == 0);
+    }
+
+    // long double complex
+    {
+        long double complex ldlc = 0.0 + 0.0*I;
+        assert(type(ldlc) == TYPENAME_LONG_DOUBLE_COMPLEX);
+        assert(strcmp(type_str(ldlc), "long double complex") == 0);
     }
 
     // pointer to char
