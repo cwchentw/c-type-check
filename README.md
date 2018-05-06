@@ -10,6 +10,8 @@ This repo implements type checking in C with `_Generic`.
 * (Dev) Valgrind: for memory leak detection.
 * (Dev) Perl: for tailing-line space trimming.
 
+We tested this program on recent GCC and Clang.
+
 ## Usage
 
 Just copy *type_check.h* to your project.
