@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 
-enum t_typename {
+enum typename_t {
     TYPENAME_BOOL,
     TYPENAME_CHAR,
     TYPENAME_SIGNED_CHAR,
