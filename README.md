@@ -1,37 +1,92 @@
-# Type Checking in C.
+# type_check
 
-This repo implements type checking in C with `_Generic`.
+A small C11 utility that classifies built-in C types using `_Generic`.
 
-## System Requirement
+This header provides a lightweight approximation of a `type(obj)` query
+for a closed set of built-in C types. It maps expressions to a simple
+enum value or a readable string.
 
-* A recent C compiler that supports C11, which is mandatory for `_Generic`.
-* (Optional) `make`: for system-wise installation.
-* (Dev) Cppcheck: for static code analysis.
-* (Dev) Valgrind: for memory leak detection.
-* (Dev) Perl: for tailing-line space trimming.
+This project is intentionally minimal. It does **not** attempt to
+implement reflection or a general type system.
 
-We tested this program on recent GCC and Clang.
+------------------------------------------------------------------------
+
+## Requirements
+
+-   A C compiler with **C11** support (required for `_Generic`)
+-   Tested with **GCC** and **Clang**
+
+Optional tools used during development:
+
+-   `make`
+-   `cppcheck`
+-   `valgrind`
+
+------------------------------------------------------------------------
+
+## Installation
+
+The header can simply be copied into your project:
+
+    type_check.h
+
+For system-wide installation:
+
+    PREFIX=/usr/local sudo make install
+
+------------------------------------------------------------------------
 
 ## Usage
 
-Just copy *type_check.h* to your project.
+The library provides two macros:
 
-For system-wise installation, run `make install`:
+    type(x)
+    type_str(x)
 
+Example:
+
+``` c
+#include <stdio.h>
+#include "type_check.h"
+
+int main(void)
+{
+    int x = 10;
+    double y = 3.14;
+
+    printf("%s\n", type_str(x));
+    printf("%s\n", type_str(y));
+}
 ```
-$ PREFIX=/usr/local sudo make install
-```
 
-This program provides two macros:
+Output:
 
-* `type(t)` emits a type-presenting enum.
-* `type_str(t)` emits a type-presenting C string.
+    int
+    double
 
-View the test program for more usage.
+`type(x)` returns an enum value (`typename_t`), while `type_str(x)`
+returns a human-readable string.
+
+------------------------------------------------------------------------
+
+## Scope
+
+This utility intentionally focuses on **built-in C types only**.
+
+It is designed as a small type classifier built on top of `_Generic`,
+not as a reflection system or a generic object framework.
+
+Extending it to arbitrary user-defined types would require manually
+maintaining a full type metadata system, which is outside the scope of
+this project.
+
+------------------------------------------------------------------------
 
 ## Author
 
-Michae Chen, 2018.
+ByteBard (2018)
+
+------------------------------------------------------------------------
 
 ## License
 
