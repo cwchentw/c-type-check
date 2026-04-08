@@ -8,79 +8,124 @@
 extern "C" {
 #endif
 
+/*
+ * Single source of truth:
+ *   C type, enum suffix, display string, category flags
+ *
+ * Category flags:
+ *   I = integer-like
+ *   F = floating-point
+ *   C = complex
+ *   P = pointer
+ *
+ * Flags are kept as 0/1 so we can reuse the same table for small traits.
+ */
+#define TYPE_CHECK_TABLE(X) \
+    X(bool,                 BOOL,                  "bool",                     1, 0, 0, 0) \
+    X(char,                 CHAR,                  "char",                     1, 0, 0, 0) \
+    X(signed char,          SIGNED_CHAR,           "signed char",              1, 0, 0, 0) \
+    X(unsigned char,        UNSIGNED_CHAR,         "unsigned char",            1, 0, 0, 0) \
+    X(short,                SHORT,                 "short",                    1, 0, 0, 0) \
+    X(int,                  INT,                   "int",                      1, 0, 0, 0) \
+    X(long,                 LONG,                  "long",                     1, 0, 0, 0) \
+    X(long long,            LONG_LONG,             "long long",                1, 0, 0, 0) \
+    X(unsigned short,       UNSIGNED_SHORT,        "unsigned short",           1, 0, 0, 0) \
+    X(unsigned int,         UNSIGNED_INT,          "unsigned int",             1, 0, 0, 0) \
+    X(unsigned long,        UNSIGNED_LONG,         "unsigned long",            1, 0, 0, 0) \
+    X(unsigned long long,   UNSIGNED_LONG_LONG,    "unsigned long long",       1, 0, 0, 0) \
+    X(float,                FLOAT,                 "float",                    0, 1, 0, 0) \
+    X(double,               DOUBLE,                "double",                   0, 1, 0, 0) \
+    X(long double,          LONG_DOUBLE,           "long double",              0, 1, 0, 0) \
+    X(float complex,        FLOAT_COMPLEX,         "float complex",            0, 0, 1, 0) \
+    X(double complex,       DOUBLE_COMPLEX,        "double complex",           0, 0, 1, 0) \
+    X(long double complex,  LONG_DOUBLE_COMPLEX,   "long double complex",      0, 0, 1, 0) \
+    X(char *,               POINTER_TO_CHAR,       "pointer to char",          0, 0, 0, 1) \
+    X(const char *,         POINTER_TO_CONST_CHAR, "pointer to const char",    0, 0, 0, 1) \
+    X(void *,               POINTER_TO_VOID,       "pointer to void",          0, 0, 0, 1) \
+    X(const void *,         POINTER_TO_CONST_VOID, "pointer to const void",    0, 0, 0, 1)
+
 enum typename_t {
-    TYPENAME_BOOL,
-    TYPENAME_CHAR,
-    TYPENAME_SIGNED_CHAR,
-    TYPENAME_UNSIGNED_CHAR,
-    TYPENAME_SHORT,
-    TYPENAME_INT,
-    TYPENAME_LONG,
-    TYPENAME_LONG_LONG,
-    TYPENAME_UNSIGNED_SHORT,
-    TYPENAME_UNSIGNED_INT,
-    TYPENAME_UNSIGNED_LONG,
-    TYPENAME_UNSIGNED_LONG_LONG,
-    TYPENAME_FLOAT,
-    TYPENAME_DOUBLE,
-    TYPENAME_LONG_DOUBLE,
-    TYPENAME_FLOAT_COMPLEX,
-    TYPENAME_DOUBLE_COMPLEX,
-    TYPENAME_LONG_DOUBLE_COMPLEX,
-    TYPENAME_POINTER_TO_CHAR,
-    TYPENAME_POINTER_TO_VOID,
+#define TYPE_CHECK_ENUM(c_type, enum_name, display_name, is_int, is_float, is_complex, is_ptr) \
+    TYPENAME_##enum_name,
+    TYPE_CHECK_TABLE(TYPE_CHECK_ENUM)
+#undef TYPE_CHECK_ENUM
     TYPENAME_OTHER
 };
 
+/*
+ * Classify an expression into enum typename_t.
+ *
+ * Note:
+ *   This is intentionally a closed-world classifier over selected built-in
+ *   types. It is not a reflection system.
+ */
 #define type(x) _Generic((x), \
-    bool: TYPENAME_BOOL, \
-    char: TYPENAME_CHAR, \
-    signed char: TYPENAME_SIGNED_CHAR, \
-    unsigned char: TYPENAME_UNSIGNED_CHAR, \
-    short: TYPENAME_SHORT, \
-    int: TYPENAME_INT, \
-    long: TYPENAME_LONG, \
-    long long: TYPENAME_LONG_LONG, \
-    unsigned short: TYPENAME_UNSIGNED_SHORT, \
-    unsigned int: TYPENAME_UNSIGNED_INT, \
-    unsigned long: TYPENAME_UNSIGNED_LONG, \
-    unsigned long long: TYPENAME_UNSIGNED_LONG_LONG, \
-    float: TYPENAME_FLOAT, \
-    double: TYPENAME_DOUBLE, \
-    long double: TYPENAME_LONG_DOUBLE, \
-    float complex: TYPENAME_FLOAT_COMPLEX, \
-    double complex: TYPENAME_DOUBLE_COMPLEX, \
-    long double complex: TYPENAME_LONG_DOUBLE_COMPLEX, \
-    char *: TYPENAME_POINTER_TO_CHAR, \
-    void *: TYPENAME_POINTER_TO_VOID, \
+#define TYPE_CHECK_GENERIC_ENUM(c_type, enum_name, display_name, is_int, is_float, is_complex, is_ptr) \
+    c_type: TYPENAME_##enum_name,
+    TYPE_CHECK_TABLE(TYPE_CHECK_GENERIC_ENUM)
+#undef TYPE_CHECK_GENERIC_ENUM
     default: TYPENAME_OTHER)
 
-#define type_str(x) _Generic((x), \
-    bool: "bool", \
-    char: "char", \
-    signed char: "signed char", \
-    unsigned char: "unsigned char", \
-    short: "short", \
-    int: "int", \
-    long: "long", \
-    long long: "long long", \
-    unsigned short: "unsigned short", \
-    unsigned int: "unsigned int", \
-    unsigned long: "unsigned long", \
-    unsigned long long: "unsigned long long", \
-    float: "float", \
-    double: "double", \
-    long double: "long double", \
-    float complex: "float complex", \
-    double complex: "double complex", \
-    long double complex: "long double complex", \
-    char *: "pointer to char", \
-    void *: "pointer to void", \
-    default: "other")
+/*
+ * Convert typename_t to a display string.
+ */
+static inline const char *typename_str(enum typename_t t)
+{
+    switch (t) {
+#define TYPE_CHECK_CASE(c_type, enum_name, display_name, is_int, is_float, is_complex, is_ptr) \
+    case TYPENAME_##enum_name: return display_name;
+        TYPE_CHECK_TABLE(TYPE_CHECK_CASE)
+#undef TYPE_CHECK_CASE
+    case TYPENAME_OTHER:
+    default:
+        return "other";
+    }
+}
+
+/*
+ * Convenience macro: classify and stringify in one step.
+ */
+#define type_str(x) typename_str(type(x))
+
+/*
+ * Small trait-like helpers.
+ *
+ * These remain intentionally shallow:
+ *   - no user-defined types
+ *   - no reflection object
+ *   - no OO-style dispatch
+ */
+
+#define is_integer(x) _Generic((x), \
+#define TYPE_CHECK_GENERIC_IS_INTEGER(c_type, enum_name, display_name, is_int, is_float, is_complex, is_ptr) \
+    c_type: is_int,
+    TYPE_CHECK_TABLE(TYPE_CHECK_GENERIC_IS_INTEGER)
+#undef TYPE_CHECK_GENERIC_IS_INTEGER
+    default: 0)
+
+#define is_floating(x) _Generic((x), \
+#define TYPE_CHECK_GENERIC_IS_FLOATING(c_type, enum_name, display_name, is_int, is_float, is_complex, is_ptr) \
+    c_type: is_float,
+    TYPE_CHECK_TABLE(TYPE_CHECK_GENERIC_IS_FLOATING)
+#undef TYPE_CHECK_GENERIC_IS_FLOATING
+    default: 0)
+
+#define is_complex(x) _Generic((x), \
+#define TYPE_CHECK_GENERIC_IS_COMPLEX(c_type, enum_name, display_name, is_int, is_float, is_complex, is_ptr) \
+    c_type: is_complex,
+    TYPE_CHECK_TABLE(TYPE_CHECK_GENERIC_IS_COMPLEX)
+#undef TYPE_CHECK_GENERIC_IS_COMPLEX
+    default: 0)
+
+#define is_pointer(x) _Generic((x), \
+#define TYPE_CHECK_GENERIC_IS_POINTER(c_type, enum_name, display_name, is_int, is_float, is_complex, is_ptr) \
+    c_type: is_ptr,
+    TYPE_CHECK_TABLE(TYPE_CHECK_GENERIC_IS_POINTER)
+#undef TYPE_CHECK_GENERIC_IS_POINTER
+    default: 0)
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // TYPE_CHECK_H
-
+#endif /* TYPE_CHECK_H */
